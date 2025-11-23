@@ -5,11 +5,10 @@ import { resetPasswordMailTemplate } from "../views/reset-password-mail.js";
 
 class MailService {
   private transporter: Transporter | null;
-  private apiUrl: string;
+  private readonly projectName: string = "Sp1r1tual pet project";
 
-  constructor(apiUrl: string) {
+  constructor() {
     this.transporter = null;
-    this.apiUrl = apiUrl;
   }
 
   private initializeTransporter(): void {
@@ -31,7 +30,7 @@ class MailService {
     await this.transporter.sendMail({
       from: process.env.SMTP_USER,
       to,
-      subject: `Activating an account in ${this.apiUrl}`,
+      subject: `Activating an account in ${this.projectName}`,
       html: activationMailTemplate(link),
     });
   }
@@ -46,10 +45,10 @@ class MailService {
     await this.transporter.sendMail({
       from: process.env.SMTP_USER,
       to,
-      subject: `Password Reset Request - ${this.apiUrl}`,
+      subject: `Password Reset Request - ${this.projectName}`,
       html: resetPasswordMailTemplate(resetLink),
     });
   }
 }
 
-export default new MailService(process.env.API_URL as string);
+export default new MailService();
